@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massimo Nicosia | NLP and ML Researcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        swissRed: '#ff3b30',
+                        offWhite: '#fcfcfc',
+                        charcoal: '#111111',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    spacing: {
+                        '128': '32rem',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Swiss Design Reset & Base */
+        body {
+            background-color: #fcfcfc;
+            color: #111111;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+		
+		.bg-theme {
+            background-color: #fcfcfc;
+		}
+
+        /* Utility for strict layout lines */
+        .grid-line {
+            border-top: 1px solid #111;
+        }
+
+        .grid-line-bottom {
+            border-bottom: 1px solid #111;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fcfcfc; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #111; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3b30; 
+        }
+
+        /* Text Selection */
+        ::selection {
+            background: #ff3b30;
+            color: white;
+        }
+
+        /* Interactive Link Underline Animation */
+        .swiss-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .swiss-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #ff3b30;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .swiss-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .swiss-link:hover {
+            color: #ff3b30;
+        }
+
+        /* Canvas Positioning */
+        canvas#network-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Increased Opacity for visibility */
+            opacity: 0.4; 
+            pointer-events: none;
+        }
+
+        /* Smooth Anchor Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col">
+
+    <!-- Background Animation -->
+    <canvas id="network-bg"></canvas>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-offWhite/90 backdrop-blur-sm border-b border-black">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="https://maxnicosia.com/" class="font-bold tracking-tighter text-xl hover:text-swissRed transition-colors">| MN | maxnicosia.com |</a>
+            
+            <nav class="hidden md:flex space-x-8 font-mono text-sm uppercase tracking-wider">
+                <a href="https://maxnicosia.com/" class="swiss-link">Home</a>
+                <a href="#about" class="swiss-link">About Me</a>
+                <a href="#news" class="swiss-link">News</a>
+                <a href="#articles" class="swiss-link">Research</a>
+                <a href="#cv" class="swiss-link">CV</a>
+                <a href="#contact" class="swiss-link">Contacts</a>
+            </nav>
+
+            <!-- Mobile Menu Icon -->
+            <button class="md:hidden" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-black bg-offWhite absolute w-full">
+            <div class="flex flex-col p-6 space-y-4 font-mono text-sm uppercase">
+                <a href="#home" class="hover:text-swissRed">Home</a>
+                <a href="#news" class="hover:text-swissRed">News</a>
+                <a href="#about" class="hover:text-swissRed">About Me</a>
+                <a href="#articles" class="hover:text-swissRed">Research</a>
+                <a href="#cv" class="hover:text-swissRed">CV</a>
+                <a href="#contact" class="hover:text-swissRed">Contacts</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-16">
+
+        <!-- Hero Section -->
+        <!-- Reduced min-height to reduce whitespace -->
+        <section id="home" class="min-h-[45vh] flex flex-col justify-center px-6 max-w-7xl mx-auto relative py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+                <div class="lg:col-span-9">
+                    <h1 class="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-4">
+                        MASSIMO<br><span class="text-outline">NICOSIA</span>
+                    </h1>
+                </div>
+                
+                <div class="lg:col-span-3 flex flex-col justify-end pb-2">
+                    <div class="font-mono text-xs uppercase tracking-widest text-gray-500 mb-1">Role</div>
+                    <h2 class="text-xl font-bold leading-tight mb-4">
+                        Staff Research Engineer<br>
+                        <span class="text-swissRed">Google DeepMind</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 border-t border-black pt-6">
+                <div class="lg:col-span-12">
+                    <p class="text-xl md:text-2xl font-medium leading-snug max-w-8xl">
+                        Hi, I am Massimo and I work at Google DeepMind (Zürich). Here I focus on multimodal understanding and generation capabilities of large language models. Whenever I can, I like to make music with my guitar and by mixing samples.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="border-t border-black bg-theme">
+            <div class="grid grid-cols-1 md:grid-cols-2 min-h-[45 vh]">
+                <!-- Left: Photo/Visual -->
+                <div class="bg-gray-100 border-b mr-10 md:border-b-0 md:border-r border-black relative group overflow-hidden flex items-center lg:justify-end min-h-[280px]">
+                    <img src="images/maxnicosia.jpeg" class="max-h-[650px]"/>
+                </div>
+
+                <!-- Right: Bio -->
+                <div class="md:p-12 p-8 flex flex-col justify-center bg-offWhite max-w-[650px]">
+                    <span class="font-mono text-xs uppercase tracking-widest text-swissRed mb-4">01 / Intro</span>
+                    <h3 class="text-3xl font-bold tracking-tight mb-6">Understanding and Generation with Vision Language Models</h3>
+                    
+                    <div class="space-y-4 text-lg leading-relaxed text-gray-800">
+                        <p>
+                            I am a core <strong class="border-b-2 border-swissRed/20">Gemini</strong> contributor and I specialize in the domain of non-natural images (charts, infographics, diagrams). I work on image generation, image understanding, ojbect detection and evaluation across pretraining and post-training.
+						</p>
+						<p>
+							In my past at Google, I worked on many things including multilinguality, tabular data understanding and semantic parsing.
+                        </p>
+                        <p>
+                            I earned my PhD from the <span class="font-semibold">University of Trento</span>, where I worked on structural kernels and deep learning methods for question answering and other tasks.
+                        </p>
+                    </div>
+					<!--
+	                <div class="lg:col-span-2 flex items-end justify-start lg:justify-center mt-8 mb-4 lg:mt-16">
+	                    <a href="#articles" class="group border-2 border-black px-8 py-3 font-mono text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300 flex items-center gap-2">
+	                        Full Bio
+	                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+	                    </a>
+	                </div>
+					-->
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section (Added) -->
+        <section id="news" class="border-t border-black bg-offWhite">
+            <div class="max-w-7xl mx-auto px-6 py-12">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/6">
+                        <span class="font-mono text-xs uppercase tracking-widest text-swissRed block mb-2">Latest Updates</span>
+                        <h3 class="text-3xl font-bold tracking-tight">News</h3>
+                    </div>
+                    <div class="md:w-5/6 space-y-6">
+                        <!-- News Item -->
+                        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-300 pb-4">
+                            <span class="font-mono text-sm text-gray-500 w-32 flex-shrink-0">Nov 2025</span>
+                            <div>
+                                <span class="font-bold">Deep Learning Indaba 2025.</span> 
+                                <span class="text-gray-600 ml-2">I will deliver a tutorial on Multimodal Reasoning during the Learnathon.</span>
+                            </div>
+                        </div>
+                         <!-- News Item -->
+                         <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-300 pb-4">
+                            <span class="font-mono text-sm text-gray-500 w-32 flex-shrink-0">July 2025</span>
+                            <div>
+                                <span class="font-bold">Attending ACL 2025.</span> 
+                                <span class="text-gray-600 ml-2">I'll be in Vienna for ACL, see you there!</span>
+                            </div>
+                        </div>
+                        <!-- News Item-->
+                        <div class="flex flex-col md:flex-row md:items-baseline border-b border-gray-300 pb-4">
+                            <span class="font-mono text-sm text-gray-500 w-32 flex-shrink-0">Jan 2024</span>
+                            <div>
+                                <span class="font-bold">Gemini 2.5 Tech Report is out.</span> 
+                                <span class="text-gray-600 ml-2">For 2.5, I focused on developing the model’s core capabilities in object detection and localization, specifically for non-natural images.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!--
+	            <div class="lg:col-span-1 flex lg:justify-center mt-10 md-4 lg:mt-10 lg:md-5">
+	                <a href="#articles" class="group border-2 border-black px-8 py-3 font-mono text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300 flex items-center gap-2">
+	                    News Archive
+	                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+	                </a>
+	            </div>
+				-->
+            </div>
+        </section>
+
+
+        <!-- Articles / Research -->
+        <section id="articles" class="border-t border-black bg-white">
+            <div class="max-w-7xl mx-auto px-6 py-16">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-widest text-swissRed mb-2 block">02 / Selected Works</span>
+                        <h3 class="text-4xl font-bold tracking-tighter">Publications</h3>
+                    </div>
+                </div>
+
+                <!-- Research Grid -->
+                <div class="grid grid-cols-1 border-t border-black">
+                    
+                    <!-- Article 1 -->
+                    <a href="https://www.arxiv.org/abs/2507.06261" target="_blank" class="group grid grid-cols-1 md:grid-cols-12 gap-4 border-b border-black py-6 px-4 hover:bg-gray-50 transition-colors relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-swissRed transform -translate-x-full group-hover:translate-x-0 transition-transform duration-200"></div>
+                        <div class="md:col-span-2 font-mono text-sm text-gray-500 pt-1">2025</div>
+                        <div class="md:col-span-8">
+                            <h4 class="text-xl font-bold mb-1 group-hover:text-swissRed transition-colors">Gemini 2.5 Tech Report</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm"> Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities.</p>
+                        </div>
+                        <div class="md:col-span-2 text-right flex md:block items-center justify-between mt-4 md:mt-0">
+                            <span class="inline-block border border-black px-2 py-1 font-mono text-xs uppercase">Arxiv</span>
+                        </div>
+                    </a>
+
+                    <!-- Article 2 -->
+                    <a href="https://aclanthology.org/2023.findings-emnlp.125/" target="_blank" class="group grid grid-cols-1 md:grid-cols-12 gap-4 border-b border-black py-6 px-4 hover:bg-gray-50 transition-colors relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-swissRed transform -translate-x-full group-hover:translate-x-0 transition-transform duration-200"></div>
+                        <div class="md:col-span-2 font-mono text-sm text-gray-500 pt-1">2023</div>
+                        <div class="md:col-span-8">
+                            <h4 class="text-xl font-bold mb-1 group-hover:text-swissRed transition-colors">XTREME-UP</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">A User-Centric Scarce-Data Benchmark for Under-Represented Languages.</p>
+                        </div>
+                        <div class="md:col-span-2 text-right flex md:block items-center justify-between mt-4 md:mt-0">
+                            <span class="inline-block border border-black px-2 py-1 font-mono text-xs uppercase">EMNLP</span>
+                        </div>
+                    </a>
+
+                    <!-- Article 3 -->
+                    <a href="https://aclanthology.org/2021.findings-emnlp.279/" target="_blank" class="group grid grid-cols-1 md:grid-cols-12 gap-4 border-b border-black py-6 px-4 hover:bg-gray-50 transition-colors relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-swissRed transform -translate-x-full group-hover:translate-x-0 transition-transform duration-200"></div>
+                        <div class="md:col-span-2 font-mono text-sm text-gray-500 pt-1">2021</div>
+                        <div class="md:col-span-8">
+                            <h4 class="text-xl font-bold mb-1 group-hover:text-swissRed transition-colors">Translate & Fill</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">Improving Zero-Shot Multilingual Semantic Parsing with Synthetic Data</p>
+                        </div>
+                        <div class="md:col-span-2 text-right flex md:block items-center justify-between mt-4 md:mt-0">
+                            <span class="inline-block border border-black px-2 py-1 font-mono text-xs uppercase">EMNLP</span>
+                        </div>
+                    </a>
+
+                </div>
+	            <div class="lg:col-span-1 flex lg:justify-center mt-12 md-4 lg:mt-10 lg:md-5">
+	                <a href="https://scholar.google.com/citations?user=lcYzgzsAAAAJ&hl=it" target="_blank" class="group border-2 border-black px-8 py-3 font-mono text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300 flex items-center gap-2">
+	                    Full Publication List (Google Scholar)
+	                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+	                </a>
+	            </div>
+            </div>
+        </section>
+
+        <!-- CV / Timeline Section -->
+        <section id="cv" class="border-t border-black bg-offWhite">
+            <div class="max-w-4xl mx-auto px-6 py-16">
+                <div class="text-center mb-12">
+                    <span class="font-mono text-xs uppercase tracking-widest text-swissRed">03 / Career Path</span>
+                    <h3 class="text-3xl font-bold mt-2">Curriculum Vitae</h3>
+                </div>
+
+                <div class="relative border-l-2 border-black ml-4 md:ml-0 space-y-10">
+                    
+                    <!-- Item 1 -->
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-swissRed border-2 border-offWhite rounded-full"></div>
+                        <div class="font-mono text-sm text-gray-500 mb-1">2023 — Present</div>
+                        <h4 class="text-lg font-bold">Google DeepMind</h4>
+                        <div class="text-sm font-bold uppercase tracking-wide text-gray-800 mb-2">Research Engineer</div>
+                        <p class="text-gray-600 max-w-lg text-sm">Focus: structured and multimodal data for Gemini pretraining and post-training, infographics generation with Nanobanana.</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-black border-2 border-offWhite rounded-full"></div>
+                        <div class="font-mono text-sm text-gray-500 mb-1">2018 — 2023</div>
+                        <h4 class="text-lg font-bold">Google Research</h4>
+                        <div class="text-sm font-bold uppercase tracking-wide text-gray-800 mb-2">Software Engineer in Research</div>
+                        <p class="text-gray-600 max-w-lg text-sm">Focus: i18n of semantic parsing models for the Assistant and YouTube, conversational semantic parsing, question answering.</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-white border-2 border-black rounded-full"></div>
+                        <div class="font-mono text-sm text-gray-500 mb-1">2014 — 2018</div>
+                        <h4 class="text-lg font-bold">University of Trento</h4>
+                        <div class="text-sm font-bold uppercase tracking-wide text-gray-800 mb-2">PhD in Computer Science</div>
+                        <p class="text-gray-600 max-w-lg text-sm">Thesis on structural kernels and neural network models for question answering systems. Advisors: Prof. A. Moschitti.</p>
+                    </div>
+					
+                    <!-- Item 4 -->
+                    <div class="relative pl-8 md:pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-white border-2 border-black squared-full"></div>
+                        <div class="font-mono text-sm text-gray-500 mb-1">2013 — 2015</div>
+                        <h4 class="text-lg font-bold">Qatar Computing Research Institute</h4>
+                        <div class="text-sm font-bold uppercase tracking-wide text-gray-800 mb-2">Research Associate</div>
+                        <p class="text-gray-600 max-w-lg text-sm">Research and software engineering (NLP and Machine Learning) in the Arabic Language Technologies group, first as a research associate and then as a consultant.</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 ml-4 md:ml-12">
+                    <a href="files/massimo-nicosia-cv.pdf" target="_blank" class="text-sm font-mono uppercase border-b border-black hover:text-swissRed hover:border-swissRed transition-colors pb-1">Download Full Resume (PDF)</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Contact -->
+        <footer id="contact" class="bg-black text-white py-16">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-widest text-gray-400 mb-4 block">Academic collaborations</span>
+                        <p class="text-5xl md:text-6xl font-bold tracking-tighter hover:text-swissRed transition-colors leading-none block mb-6">
+                            Get in touch
+                        </p>
+                        <p class="text-gray-400 max-w-sm">
+                            Open to collaborations on multimodal learning and synthetic data generation.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col justify-end items-start md:items-end space-y-4">
+                        <a href="https://scholar.google.com/citations?user=lcYzgzsAAAAJ&hl=it" target="_blank" class="flex items-center gap-3 group">
+                            <span class="font-mono text-sm uppercase tracking-wider group-hover:text-swissRed transition-colors">Google Scholar</span>
+                            <svg class="w-5 h-5 text-white group-hover:text-swissRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+                        </a>
+                        <a href="https://x.com/maxnicosia" target="_blank" class="flex items-center gap-3 group">
+                            <span class="font-mono text-sm uppercase tracking-wider group-hover:text-swissRed transition-colors">Twitter / X</span>
+                            <svg class="w-5 h-5 text-white group-hover:text-swissRed" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/in/massimonicosia/" target="_blank" class="flex items-center gap-3 group">
+                            <span class="font-mono text-sm uppercase tracking-wider group-hover:text-swissRed transition-colors">LinkedIn</span>
+                            <svg class="w-5 h-5 text-white group-hover:text-swissRed" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-800 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-500">
+                    <p>&copy; 2026 Massimo Nicosia. Designed with the help of Gemini and Nanobanana</p>
+                    <p class="mt-2 md:mt-0">Zürich, Switzerland</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Logic for Graph Background -->
+    <script>
+        const canvas = document.getElementById('network-bg');
+        const ctx = canvas.getContext('2d');
+        
+        let nodes = [];
+        const nodeCount = 60; // Number of nodes
+        const connectionDistance = 150; // Max distance to draw line
+        const mouseDistance = 200;
+        
+        let mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initNodes();
+        }
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocity X - slow drift
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocity Y - slow drift
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                
+                // Subtle Mouse interaction (Repulsion)
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const directionX = forceDirectionX * force * 0.5;
+                        const directionY = forceDirectionY * force * 0.5;
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initNodes() {
+            nodes = [];
+            for (let i = 0; i < nodeCount; i++) {
+                nodes.push(new Node());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw nodes
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                nodes[i].draw();
+
+                // Draw connections
+                for (let j = i; j < nodes.length; j++) {
+                    let dx = nodes[i].x - nodes[j].x;
+                    let dy = nodes[i].y - nodes[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        // Semantic Parsing Web look: varying opacity based on distance
+                        let opacity = 1 - (distance / connectionDistance);
+                        // Increased opacity multiplier from 0.4 to 0.9 for better visibility
+                        ctx.strokeStyle = 'rgba(17, 17, 17,' + opacity * 0.9 + ')'; 
+                        ctx.lineWidth = 0.8; // Slightly thicker lines
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize
+        resizeCanvas();
+        animate();
+    </script>
+</body>
+</html>
